@@ -1,0 +1,28 @@
+<UserControl x:Class="ComputerLoadMonitoring.Views.Controls.HardwareRow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Column="0"
+                   Text="{Binding Label, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                   Style="{StaticResource MetricLabelStyle}" />
+
+        <StackPanel Grid.Column="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <TextBlock Text="{Binding LoadValue, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                       Foreground="{Binding LoadColor, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                       Style="{StaticResource MetricValueStyle}"
+                       Margin="0,0,10,0" />
+            <TextBlock Text="{Binding TempValue, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                       Foreground="{Binding TempColor, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                       Style="{StaticResource MetricValueStyle}" />
+        </StackPanel>
+    </Grid>
+
+</UserControl>

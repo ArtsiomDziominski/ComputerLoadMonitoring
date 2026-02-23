@@ -1,0 +1,79 @@
+<Window x:Class="ComputerLoadMonitoring.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:ComputerLoadMonitoring.ViewModels"
+        xmlns:ctrl="clr-namespace:ComputerLoadMonitoring.Views.Controls"
+        Title="System Monitor"
+        Width="220" SizeToContent="Height"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Topmost="True"
+        ResizeMode="NoResize"
+        Icon="/app.ico"
+        ShowInTaskbar="False"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown">
+
+    <Window.DataContext>
+        <vm:MainViewModel />
+    </Window.DataContext>
+
+    <!-- Контекстное меню (правый клик) -->
+    <Window.ContextMenu>
+        <ContextMenu>
+            <MenuItem Header="Width">
+                <MenuItem Header="Compact (220)" Tag="220" Click="WidthOption_Click" IsChecked="True" />
+                <MenuItem Header="Normal (290)" Tag="290" Click="WidthOption_Click" />
+                <MenuItem Header="Wide (350)" Tag="350" Click="WidthOption_Click" />
+                <MenuItem Header="Extra Wide (420)" Tag="420" Click="WidthOption_Click" />
+            </MenuItem>
+            <MenuItem Header="Click-Through"
+                      IsCheckable="True"
+                      IsChecked="{Binding IsClickThrough}" />
+            <MenuItem x:Name="StartupMenuItem"
+                      Header="Run at Startup"
+                      IsCheckable="True"
+                      Click="StartupMenuItem_Click" />
+            <Separator />
+            <MenuItem Header="Exit"
+                      Command="{Binding ExitCommand}" />
+        </ContextMenu>
+    </Window.ContextMenu>
+
+    <!-- Корневой контейнер: фон меняется по температуре, мигает при 90°C+ -->
+    <Border x:Name="RootBorder"
+            Background="{Binding MaxTemp, Converter={StaticResource TempToBackgroundConverter}}"
+            CornerRadius="10"
+            Padding="16,12"
+            BorderBrush="#40FFFFFF"
+            BorderThickness="1"
+            Style="{StaticResource AlertBorderStyle}">
+
+        <StackPanel>
+            <!-- CPU: загрузка (голубой) + температура (оранжевый) -->
+            <ctrl:HardwareRow Label="CPU"
+                              LoadValue="{Binding CpuLoad, StringFormat={}{0:F1}%}"
+                              LoadColor="#FF4FC3F7"
+                              TempValue="{Binding CpuTemp, StringFormat={}{0:F0}°C}"
+                              TempColor="#FFFFB74D" />
+
+            <!-- GPU: загрузка (зелёный) + температура (оранжевый) -->
+            <ctrl:HardwareRow Label="GPU"
+                              LoadValue="{Binding GpuLoad, StringFormat={}{0:F1}%}"
+                              LoadColor="#FF81C784"
+                              TempValue="{Binding GpuTemp, StringFormat={}{0:F0}°C}"
+                              TempColor="#FFFFB74D"
+                              Margin="0,6,0,0" />
+
+            <!-- RAM: процент (фиолетовый) + использовано/всего GB -->
+            <ctrl:RamRow Margin="0,6,0,0" />
+
+            <!-- Статус: текст ошибок (красный, скрыт если пусто) -->
+            <TextBlock Text="{Binding StatusText}"
+                       Foreground="#FFEF5350"
+                       FontSize="10"
+                       TextWrapping="Wrap"
+                       Visibility="{Binding StatusText, Converter={StaticResource StringToVisibilityConverter}}" />
+        </StackPanel>
+    </Border>
+</Window>
