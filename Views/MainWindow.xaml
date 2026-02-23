@@ -10,7 +10,7 @@
         Background="Transparent"
         Topmost="True"
         ResizeMode="NoResize"
-        Icon="/app.ico"
+
         ShowInTaskbar="False"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
 
